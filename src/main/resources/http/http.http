@@ -1,0 +1,31 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+### TGPCookie 获取
+POST http://lol.magnet.zhangyoubao.com/server/rest?api=search.user&game=lol&userId=0&platformVersion=502005
+###获取召唤师列表
+GET https://api.pallas.tgp.qq.com/core/search_player?callback=jQuery&key=abj
+Cookie: {{WeGameCookie}}
+
+### get_user_info
+GET https://api.pallas.tgp.qq.com/core/tcall?callback=jQuery&p=[[3,{"area_id":"14","qquin":"L205558963983856325"]]
+Cookie: {{WeGameCookie}}
+
+### 查询lolid
+GET https://api.pallas.tgp.qq.com/core/tcall?callback=jQuery&p=[[33,{"usreinfo":{"area_id":"15","qquin":"L2369917094592456724"},"target_list":[{"area_id":"14","qquin":"L13882545130811156254"}]}]]
+Cookie: {{WeGameCookie}}
+
+### 查询用户信息
+GET http://api.pallas.tgp.qq.com/core/tcall?p=[[2,{"user_info":[{"qquin":"L13882545130811156254","area_id":"14"}]}]]&callback=jQuery
+Cookie:{{WeGameCookie}}
+
+### 获取段位
+GET http://apps.game.qq.com/lol/api/v2013/userinfo.php?p1=4023766304&p2=14
+###
+###通过QQ Cookie 获取TGP(WeGame) Cookie
+POST https://middle.tgp.qq.com/clientapi/auth/login_by_qq
+{"mappid":"10001","clienttype":"1000004","mcode":"","login_info":{"qq_info_type":3,"uin":"2322763691","sig":"@1pJNRNNfB"}}
+###

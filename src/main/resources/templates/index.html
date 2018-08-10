@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <h1 class="text-center">英雄联盟小助手</h1>
+    </div>
+    <div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师名称:</button>
+            </span>
+            <input id="name" type="text" class="form-control input-lg" placeholder="名称">
+        </div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师大区:</button>
+            </span>
+            <select class="form-control input-lg" id="area" title="大区">
+                <option th:each="item :${areaList}"
+                        th:text="${item.getName()}"
+                        th:value="${item.getId()}"></option>
+            </select>
+        </div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg"
+                         type="button">查&nbsp;&nbsp;&nbsp;询&nbsp;&nbsp;&nbsp;码:</button>
+            </span>
+            <input id="code" type="text" class="form-control input-lg" placeholder="不填写，试查">
+        </div>
+        <div class="input-control" style="margin: 25px 10px;">
+            <input id="btSearch" type="button" class="form-control input-lg" onclick="submit()" value="查询">
+        </div>
+    </div>
+    <div style="margin: 10px;min-height: 102px;">
+        <div class="alert alert-success text-center with-icon hide" id="success">
+            <div class="text-center" style="display: block;padding: 10px 0;font-weight: bold">
+                <i class="icon-ok-sign"></i>
+                <span class="content" id="qq_data"></span>
+                <button class="clipt btn" style="margin: 0 10px;">点击复制</button>
+            </div>
+            <p id="tips" class="hide">购买查询码可以查询完整QQ号码</p>
+        </div>
+    </div>
+    <div style="position:absolute;left:0;right: 0;text-align: center;margin-top: 10px;padding-bottom: 40px;">
+        <div>
+            <a class="btn input-lg" href="https://t.cn/RgOxQEQ" style="width: 45%">购买查询码</a>
+            <a class="btn input-lg" style="width: 45%" href="/history">查询记录</a>
+        </div>
+        <div style="margin-top: 20px;">
+            <a class="btn input-lg" style="width: 90%" href="http://qm.qq.com/cgi-bin/qm/qr?k=aKCrge9RgZXwjNyvpCQbmZ7ZpJh2q8Lk">有任何问题，点击联系作者</a>
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script th:inline="javascript">
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+
+
+    var Mes_Success = $("#success");
+    var Mes_Loading = $("#lodding");
+    var tips = $("#tips");
+    var $btSearch = $("#btSearch");
+
+    let clipboard = new ClipboardJS('.clipt', {
+        text: function () {
+            let area = $("#area option:selected").text();
+            let name = $("#name").val();
+            let qq = $("#qq_data").text();
+            return area + "--" + name + "--" + qq;
+        }
+    });
+    clipboard.on('success', function () {Tip_Success.show("复制成功");});
+    clipboard.on('error', function () {Tip_Danger.show("复制失败");});
+    function submit() {
+        Mes_Loading.removeClass("hide");
+        Mes_Success.addClass("hide");
+        var name = $("#name").val();
+        var area = $("#area").val();
+        var code = $("#code").val();
+        if (name === "") {
+            Tip_Info.show("召唤师名称(ID)不能为空");
+            Mes_Loading.addClass("hide");
+            return;
+        }
+        $btSearch.val("查询中。。。");
+        $.ajax({
+            method: 'post',
+            url:'/api/summoner',
+            data:{name:name, code:code, areaId:area},
+            success:function (ret) {
+                Mes_Loading.addClass("hide");
+                tips.addClass("hide");
+                if (ret.code === 200) {
+                    Mes_Success.removeClass("hide");
+                    $("#qq_data").text(ret.data);
+                    Tip_Success.show(ret.message);
+                }else if(ret.code === 204){
+                    Mes_Success.removeClass("hide");
+                    $("#qq_data").text(ret.data);
+                    Tip_Danger.show(ret.message);
+                }else {
+                    Tip_Danger.show(ret.message);
+                    tips.removeClass("hide");
+                }
+            },
+            error:function () {
+                Mes_Loading.addClass("hide");
+                Tip_Danger.show("多次出现该提示，请联系站长");
+            }
+        });
+        $btSearch.val("查询");
+    }
+</script>
+</body>
+</html>

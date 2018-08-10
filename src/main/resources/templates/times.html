@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base::head}"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <h1 class="text-center">英雄联盟小助手</h1>
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">查询码:</button>
+            </span>
+        <input id="code" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">剩余次数：</button>
+            </span>
+        <input id="times" readonly type="text" class="form-control input-lg">
+        <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">次</button>
+        </span>
+    </div>
+    <div class="input-control" style="margin: 25px 10px;">
+        <input type="submit" class="form-control input-lg" onclick="query()" value="查询">
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script>
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+    function query() {
+        var code = $("#code").val();
+        $.ajax({
+            method: 'post',
+            url:'/api/times',
+            data:{code: code},
+            success:function (ret) {
+                if (ret.code === 200) {
+                    $("#times").val(ret.data);
+                    Tip_Success.show('查询成功，剩余' + ret.data + '次');
+                } else {
+                    $("#times").val("查询失败");
+                    Tip_Danger.show(ret.message);
+                }
+            },
+            error:function () {
+                Tip_Danger.show("多次出现该提示，请联系站长");
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base::head}"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <h1 class="text-center">英雄联盟小助手</h1>
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">查询码:</button>
+            </span>
+        <input id="code" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-control" style="margin: 25px 10px;">
+        <input type="submit" class="form-control input-lg" onclick="query()" value="查询">
+    </div>
+    <table class="table hide" width="95%" >
+        <thead>
+        <tr>
+            <td>大区</td>
+            <td>名称</td>
+            <td>QQ</td>
+        </tr>
+        </thead>
+        <tbody id="append">
+        </tbody>
+    </table>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script>
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+    var clipboard = new ClipboardJS('#clipt');
+    var $append = $("#append");
+    var $table = $("table");
+    clipboard.on('success', function () {Tip_Success.show("复制成功");});
+    clipboard.on('error', function () {Tip_Danger.show("复制失败");});
+    function query() {
+        var code = $("#code").val();
+        $.ajax({
+            method: 'post',
+            url:'/api/searchbycode',
+            data:{code: code},
+            success:function (ret) {
+                $append.html("");
+                $table.addClass("hide");
+                if (ret.code === 200) {
+                    let data = ret.data;
+                    for (let i=0;i<data.length;i++){
+                        let tr = "<tr>" +
+                            "            <td>" + data[i].name + "</td>" +
+                            "            <td>" + data[i].areaName + "</td>" +
+                            "            <td>" + data[i].qq + "</td>" +
+                            "        </tr>";
+                        $append.append(tr);
+                    }
+                    $table.removeClass("hide");
+                } else {
+                    Tip_Danger.show("查询码不存在");
+                }
+            },
+            error:function () {
+                Tip_Danger.show("多次出现该提示，请联系站长");
+            }
+        });
+    }
+</script>
+</body>
+</html>

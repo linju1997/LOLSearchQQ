@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LOL英雄联盟召唤师名称(ID)查询QQ号--忆工坊</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="lol查QQ,英雄联盟查QQ,艾迪查QQ,lol角色查qq号,男爵领域ID查QQ"/>
+    <meta name="description" content="英雄联盟，根据英雄联盟召唤师名称(ID)查QQ，查询百分百准确,查询效率极高！"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
+    <script>
+        function setCookie(name, value) {
+            let exp = new Date();
+            exp.setTime(exp.getTime() + 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+    </script>
+</head>
+<body>
+<nav th:fragment="nav" class="navbar" role="navigation">
+    <div class="container-fluid">
+        <!-- 导航头部 -->
+        <div class="navbar-header">
+            <!-- 移动设备上的导航切换按钮 -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-example">
+                <span class="sr-only">切换导航</span>
+                <span class="icon icon-bars"></span>
+            </button>
+            <!-- 品牌名称或logo -->
+            <a class="navbar-brand pull-left" href="/">忆</a>
+        </div>
+        <!-- 导航项目 -->
+        <div class="collapse navbar-collapse navbar-collapse-example">
+            <!-- 一般导航项目 -->
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">ID查QQ</a></li>
+                <li><a href="/times">查询码剩余次数查询</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

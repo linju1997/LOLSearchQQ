@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/code" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div>
+        <form method="post" action="/admin/auth">
+            <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">访问密码:</button>
+            </span>
+                <input id="auth" name="auth" type="text" class="form-control input-lg" placeholder="password">
+            </div>
+            <div class="input-control" style="margin: 25px 10px;">
+                <input type="submit" class="form-control input-lg" onclick="login()" value="验证">
+            </div>
+        </form>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script>
+    function login() {
+        let auth = $("#auth").val();
+        setCookie("auth", auth);
+    }
+
+    function setCookie(name, value) {
+        let Days = 30;
+        let exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + value + ";path=/;expires=" + +exp.toGMTString();
+    }
+</script>
+</body>
+</html>

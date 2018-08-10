@@ -1,0 +1,16 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+GET http://api.lolbox.duowan.com/api/v3/player/dx2/4024190656/
+
+###
+GET http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=combatGains&areaId=3&gameId=2162374875
+
+###
+
+http://api.lolbox.duowan.com/api/v3/player/search/?player_name_list=幻森o&game_zone=班德尔城
+###

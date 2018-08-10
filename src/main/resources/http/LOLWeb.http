@@ -1,0 +1,70 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+###
+
+### 获取WeGameCookie
+GET http://api.fengkmm.me/cookie/wegame?qq=2558807914&password=QIAO520...
+### 获取QQCookie
+GET http://api.fengkmm.me/cookie/qq?qq=2558807914&password=QIAO520...
+
+###
+GET http://api.fengkmm.me
+
+### Search
+GET https://api.pallas.tgp.qq.com/core/search_player?callback=jQuery&key=宵闇花火
+Cookie: {{WeGameCookie}}
+
+### 查询LOL id
+GET https://api.pallas.tgp.qq.com/core/tcall?callback=jQuery&p=[[2,{"area_id":"5","qquin":"La4a38385174531084366"}]]
+Cookie: {{WeGameCookie}}
+
+#queueId=
+#<option value="70,72,73,75,76,78,96,98,100,300,310,313,317,318,325,400,420,430,450,460,600,610,940,950,960,980,990,420,440,470,83,800,810,820,830,840,850">所有模式</option>
+#<option value="70,72,73,75,76,78,96,98,100,300,310,313,317,318,325,400,430,450,460,600,610,940,950,960,980,990">匹配</option>
+#<option value="83,800,810,820,830,840,850">人机</option>
+### 获取GameId
+GET http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=matchList&areaId=14&accountId=2959604264 HTTP/1.1
+Host: apps.game.qq.com
+Cookie: {{QQCookie}}
+
+
+### 根据GameId获取十个人的QQ号码
+GET http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=combatGains&areaId=5&gameId=1752738901
+Cookie: {{QQCookie}}
+###
+
+
+### 获取gameId2
+GET https://api.pallas.tgp.qq.com/core/tcall?callback=jQuery&p=[[3,{"qquin":"La8240759341705249697","area_id":"2"}]]
+Cookie: {{WeGameCookie}}
+
+###
+
+GET https://api.pallas.tgp.qq.com/lol/get_player_banner_info?callback=jQuery&area_id=14&qquin=2959604264
+Cookie: {{WeGameCookie}}
+
+###
+
+GET http://apps.game.qq.com/lol/api/v2013/summoner.php?p1=1
+Cookie:{{WeGameCookie}}
+###
+GET http://apps.game.qq.com/lol/api/v2013/tier.php?p1=4016753832&p2=5&d1=tierObj&_=1530160762118
+Cookie:{{WeGameCookie}}
+###
+GET http://apps.game.qq.com/lol/Go/battle/qxt?p1=4016753832&p2=5&type=jsonp&r1=gameObj&source=1&r=0.6239289130553742&_=1530160762117
+###
+
+GET http://api.pallas.tgp.qq.com/core/tcall?p=[[35,{"area_id":"6","qquin":"La2d65339515628820499"}]]&_=1404353976654
+Cookie: {{WeGameCookie}}
+###
+GET http://apps.game.qq.com/lol/Go/Entrance/auth?ua1=5&ua2=1&p2=14&c1=L13882545130811156254&ra1=retSNameObj&r=123
+Cookie: {{WeGameCookie}}
+
+### 获取用户的 段位 ，最后游戏时间
+GET http://apps.game.qq.com/lol/api/v2013/userinfo.php?p1=4023766304&p2=14&d1=res
+Cookie: {{WeGameCookie}}
+###

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base::head}"></head>
+<body>
+    <div th:replace="~{base::nav}"/>
+    <div class="card" style="margin: 30px;">
+        <div class="card-heading"><strong>访问错误</strong></div>
+        <div class="card-content text-muted">
+            <p th:text="|错误信息:|"></p>
+            <p th:text="|Status:  ${status}|"></p>
+            <p th:text="|Error:  ${error}|"></p>
+            <p th:text="|Path:  ${path}|"></p>
+            <p th:text="|Message:  ${message}|"></p>
+            <p>如果你愿意可以加作者QQ:2218890669,将错误信息截图，发送给作者，谢谢</p>
+            <p><a href="http://qm.qq.com/cgi-bin/qm/qr?k=aKCrge9RgZXwjNyvpCQbmZ7ZpJh2q8Lk" style="color: red;">点击加作者好友</a></p>
+            <a href="/" style="color: green;">返回主页</a>
+        </div>
+    </div>
+    <script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+</body>
+</html>

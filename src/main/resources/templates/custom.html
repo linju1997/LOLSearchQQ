@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading">
+        <h1 class="text-center">LOL定制查Q程序</h1>
+        <div style="font-size: 15px;font-weight: bold" class="text-center">
+            <p style="display: inline-block" th:text="|用户:${code}|"></p>
+            <p style="display: inline-block;color: red;">剩余次数:<span id="times" th:text="${times}"></span></p>
+        </div>
+    </div>
+    <div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师名称:</button>
+            </span>
+            <input id="name" type="text" class="form-control input-lg" placeholder="名称">
+        </div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师大区:</button>
+            </span>
+            <select class="form-control input-lg" id="area">
+                <option th:each="item :${areaList}"
+                        th:text="${item.getName()}"
+                        th:value="${item.getId()}"></option>
+            </select>
+        </div>
+        <div class="input-group" style="margin: 25px 10px;display: none;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg"
+                         type="button">查&nbsp;&nbsp;&nbsp;询&nbsp;&nbsp;&nbsp;码:</button>
+            </span>
+            <input id="code" type="text" class="form-control input-lg" th:value="${code}" placeholder="查询码必填">
+        </div>
+        <div class="input-control" style="margin: 25px 10px;">
+            <button id="search" style="width: 100%" class="btn btn-lg" onclick="submit()">查询</button>
+        </div>
+    </div>
+    <div style="margin: 20px;">
+        <div class="alert alert-success text-center with-icon hide" id="success">
+            <div class="text-center" style="display: block;padding: 10px 0;font-weight: bold">
+                <i class="icon-ok-sign"></i>
+                <span class="content" id="qq_data"></span>
+                <button class="clipt btn" style="margin: 0 10px;">点击复制</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script th:inline="javascript">
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+    var Mes_Success = $("#success");
+    var Mes_Loading = $("#lodding");
+
+    let clipboard = new ClipboardJS('.clipt', {
+        text: function () {
+            let area = $("#area option:selected").text();
+            let name = $("#name").val();
+            let qq = $("#qq_data").text();
+            return area + '--' + name + '--' + qq;
+        }
+    });
+    clipboard.on('success', function () {
+        Tip_Success.show('复制成功,粘贴即可');
+    });
+    clipboard.on('error', function () {
+        Tip_Danger.show("复制失败");
+    });
+
+    function submit() {
+        Mes_Loading.removeClass("hide");
+        Mes_Success.addClass("hide");
+
+        /*
+        将按钮 disable 防止重复点击
+         */
+        var $search = $("#search");
+        $search.addClass("disabled");
+
+        let name = $("#name").val().trim();
+        let area = $("#area").val();
+        let code = $("#code").val();
+
+        if (name === "") {
+            $search.removeClass("disabled");
+            Tip_Info.show('召唤师名称(ID)不能为空');
+            return;
+        }
+
+        $.ajax({
+            method: 'post',
+            url: '/api/summoner',
+            data: {name: name, code: code, areaId: area},
+            success: function (ret) {
+                $search.removeClass("disabled");
+                Mes_Loading.addClass("hide");
+                if (ret.code === 200) {
+                    Mes_Success.removeClass("hide");
+                    $("#qq_data").text(ret.data);
+                    Tip_Success.show("QQ:" + ret.data);
+                } else {
+                    Tip_Danger.show(ret.message);
+                }
+            },
+            error: function () {
+                Mes_Loading.addClass("hide");
+                Tip_Danger.show("多次出现该提示，请联系站长");
+            }
+        });
+        queryTimes();
+    }
+
+    function queryTimes() {
+        let code = $("#code").val();
+        $.post("/api/times", {"code": code}, function (ret) {
+            if (ret.data == null) {
+                $("#times").text(0);
+            } else {
+                $("#times").text(ret.data);
+            }
+        })
+    }
+</script>
+</body>
+</html>

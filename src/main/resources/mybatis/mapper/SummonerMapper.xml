@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fves24.id.db.mapper.SummonerMapper">
+    <insert id="saveSummoner">
+        insert or ignore into summoner (name, area_name, qq, code) values
+            (#{summoner.name},#{summoner.areaName},#{summoner.qq},#{code})
+    </insert>
+
+    <select id="searchSummoner" resultType="Summoner">
+        select name,area_name,qq
+        from summoner
+        where code = #{code}
+    </select>
+</mapper>

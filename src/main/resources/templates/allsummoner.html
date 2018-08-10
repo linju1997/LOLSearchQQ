@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading">
+        <h1 class="text-center">LOL定制查Q程序</h1>
+    </div>
+    <div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师名称:</button>
+            </span>
+            <input id="name" type="text" class="form-control input-lg" placeholder="名称">
+        </div>
+        <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">召唤师大区:</button>
+            </span>
+            <select class="form-control input-lg" id="area">
+                <option th:each="item :${areaList}"
+                        th:text="${item.getName()}"
+                        th:value="${item.getId()}"></option>
+            </select>
+        </div>
+        <div class="input-control" style="margin: 25px 10px;">
+            <button id="search" style="width: 100%" class="btn btn-lg" onclick="submit()">查询</button>
+        </div>
+    </div>
+    <div style="margin: 20px;">
+        <div class="alert alert-success text-center with-icon hide" id="success">
+            <div class="text-center" style="text-align:center;display: block;padding: 10px 0;font-weight: bold">
+                <i class="icon-ok-sign"></i>
+                <span>查询成功</span>
+                <table border="1" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <td>大区</td>
+                        <td>名称</td>
+                        <td>QQ</td>
+                    </tr>
+                    </thead>
+                    <tbody id="qq_data">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script th:inline="javascript">
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+
+    var Mes_Success = $("#success");
+    var Mes_Loading = $("#lodding");
+    var QQ_Data = $("#qq_data");
+
+    function submit() {
+        Mes_Loading.removeClass("hide");
+        Mes_Success.addClass("hide");
+        var name = $("#name").val();
+        var area = $("#area").val();
+        var areaName = $("#area option:selected").text();
+        var code = $("#code").val();
+        if (name === "") {
+            Tip_Info.show("召唤师名称(ID)不能为空");
+            Mes_Loading.addClass("hide");
+            return;
+        }
+        $.ajax({
+            method: 'post',
+            url:'/api/allsummoner',
+            data:{name:name, code:code, areaId:area},
+            success:function (ret) {
+                Mes_Loading.addClass("hide");
+                if (ret.code === 200) {
+                    Mes_Success.removeClass("hide");
+                    let data = ret.data;
+                    QQ_Data.html("");
+                    for (let i = 0; i < 10; i++) {
+                        let name = data[i].name;
+                        let qq = data[i].qq;
+                        let ele = "<tr>" +
+                            " <td>" + name + "</td>" +
+                            " <td>" + areaName + "</td>" +
+                            " <td>" + qq + "</td>" +
+                            "</tr>";
+                        QQ_Data.append(ele);
+                    }
+                    Tip_Success.show("查询成功");
+                } else {
+                    Tip_Danger.show(ret.message);
+                }
+            },
+            error:function () {
+                Mes_Loading.addClass("hide");
+                Tip_Danger.show("多次出现该提示，请联系站长");
+            }
+        });
+    }
+</script>
+</body>
+</html>

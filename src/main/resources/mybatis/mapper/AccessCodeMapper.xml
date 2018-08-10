@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fves24.id.db.mapper.AccessCodeMapper">
+    <insert id="saveAccessCode">
+        insert or ignore into access_code
+        (code, times, modify, note)
+        values
+        (#{code}, #{times}, #{modify}, #{note})
+    </insert>
+
+    <insert id="saveAccessCodes">
+        insert into access_code
+        (code, times, modify, note)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.code}, #{item.times}, #{item.modify}, #{item.note})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAccessCode">
+        delete
+        from access_code
+        where code = #{code}
+    </delete>
+
+    <delete id="deleteAccessCodes">
+        delete
+        from access_code
+        where code in (
+                <foreach item="code" collection="list" separator=",">
+                    #{code}
+                </foreach>
+        )
+    </delete>
+
+    <update id="update">
+        update access_code
+        set times = #{times},modify=#{modify}, note = #{note}
+        where code = #{code}
+    </update>
+
+    <update id="addTimesByCode">
+        update access_code
+        set times = times + #{times}
+        where code = #{code}
+    </update>
+
+    <update id="reduceTimesByCode">
+        update access_code
+        set times = times - 1
+        where times > 0 and code = #{code}
+    </update>
+
+    <select id="getTimesByCode" resultType="Integer">
+        select times
+        from access_code
+        where code = #{code}
+    </select>
+
+    <select id="getAllAccessCode" resultType="AccessCode">
+        select id,code,times,note
+        from access_code
+    </select>
+
+    <select id="exist" resultType="AccessCode">
+        select id,code,times,note
+        from access_code
+        where code = #{code}
+    </select>
+
+</mapper>

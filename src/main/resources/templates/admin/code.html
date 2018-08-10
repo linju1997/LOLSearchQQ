@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">Code&nbsp;&nbsp;:</button>
+            </span>
+        <input id="code" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">Times:</button>
+            </span>
+        <input id="times" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">Note&nbsp;&nbsp;:</button>
+            </span>
+        <input id="note" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-control" style="margin: 25px 10px;">
+
+        <div style="margin: 20px 0;">
+            <button style="width: 49%;" class="btn btn-lg" onclick="add()">添加</button>
+            <button  style="width: 49%;" class="btn btn-lg" onclick="addTimes()">增加</button>
+        </div>
+        <div style="margin: 20px 0;">
+            <input type="button" style="width: 100%;" class="btn btn-lg clipt" data-clipboard-target="#code" onclick="randomCode()" value="生成查询码">
+        </div>
+        <div>
+            <button style="width: 100%;" class="btn btn-lg" onclick="update()">更新</button>
+        </div>
+        <div style="margin-top: 20px;">
+            <a href="/admin/codes" style="width: 100%;" class="btn btn-lg">批量增加查询码</a>
+        </div>
+    </div>
+</div>
+<!-- ZUI Javascript 依赖 jQuery -->
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script>
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+    var clipboardJS = new ClipboardJS('.clipt');
+    var $code = $("#code");
+    var $times = $("#times");
+    var $note = $("#note");
+    function createCode() {
+        var str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWSYZ";
+        var length = str.length;
+        var code = "";
+        for (var i = 0; i < 8; i++) {
+            var randomNumber = (Math.random() * (length-1)).toFixed(0);
+            code += str[randomNumber];
+        }
+        return code;
+    }
+
+    function randomCode() {
+        var code = createCode();
+        $("#code").val(code);
+        Tip_Success.show('查询码:' + code);
+    }
+    function add() {
+        var code = $("#code").val();
+        var times = $("#times").val();
+        var note = $("#note").val();
+
+        if (code === "") {
+            Tip_Info.show("查询码不能为空");
+            return;
+        }
+        if (times === "") {
+            Tip_Info.show("添加次数不能为空");
+            return;
+        }
+        $.post("/api/admin/code/add", {
+            "code": code.trim(),
+            "times": times,
+            "note": note.trim()
+        }, function (ret) {
+            if (ret.code === 200) {
+                Tip_Success.show(ret.message);
+            } else {
+                Tip_Danger.show(ret.message);
+            }
+        });
+    }
+
+    function update() {
+        var code = $("#code").val().trim();
+        var times = $("#times").val().trim();
+        var note = $("#note").val().trim();
+        var update = confirm("是否更新?");
+        if (!update) {
+            return;
+        }
+        $.post("/api/admin/code/update", {
+            "code": code.trim(),
+            "times": times,
+            "note": note.trim()
+        }, function (ret) {
+            if (ret.code === 200) {
+                Tip_Success.show(ret.message);
+            } else {
+                Tip_Danger.show(ret.message);
+            }
+        });
+    }
+    
+    function addTimes() {
+        var code = $code.val().trim();
+        var times = $times.val();
+        $.post("/api/admin/code/addtimes", {
+            code: code,
+            times: times
+        }, function (ret) {
+            if (ret.code === 200) {
+                Tip_Success.show(ret.message);
+            } else {
+                Tip_Danger.show(ret.message);
+            }
+        });
+    }
+</script>
+</body>
+</html>

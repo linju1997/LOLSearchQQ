@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">前&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缀:</button>
+            </span>
+        <input id="prefix" type="text" class="form-control input-lg" value="购买后请及时使用">
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">生成个数:</button>
+            </span>
+        <input id="sum" type="text" class="form-control input-lg">
+    </div>
+    <div class="input-group" style="margin: 25px 10px;">
+            <span class="input-group-btn">
+                 <button class="btn btn-default input-lg" type="button">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注:</button>
+            </span>
+        <input id="note" type="text" class="form-control input-lg" value="发卡网">
+    </div>
+    <div class="input-control" style="margin: 25px 10px;">
+        <div style="margin: 20px 0;">
+            <input type="button" style="width: 100%;" class="btn btn-lg" onclick="addCodes()" value="生成查询码">
+        </div>
+    </div>
+    <div class="input-control" style="margin: 25px 10px;">
+        <textarea id="codes" style="width: 100%;min-height: 240px;"></textarea>
+    </div>
+</div>
+<!-- ZUI Javascript 依赖 jQuery -->
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script>
+    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+
+    var $prefix = $("#prefix");
+    var $sum = $("#sum");
+    var $note = $("#note");
+    var $codes = $("#codes");
+
+    function createCode() {
+        var str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWSYZ";
+        var length = str.length;
+        var code = "";
+        for (var i = 0; i < 8; i++) {
+            var randomNumber = (Math.random() * (length-1)).toFixed(0);
+            code += str[randomNumber];
+        }
+        return code;
+    }
+
+    function addCodes() {
+        var sum = $sum.val()
+        for (let i = 0;i<sum;i++) {
+            var code = createCode();
+
+            $.post("/api/admin/code/add", {
+                "code": code.trim(),
+                "times": 1,
+                "note": $note.val().trim()
+            }, function (ret) {
+                if (ret.code === 200) {
+                    let codes = $prefix.val()+" "+ret.data.code+"\r\n";
+                    $("#codes").append(codes);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>
