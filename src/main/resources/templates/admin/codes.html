@@ -48,6 +48,7 @@
     var $sum = $("#sum");
     var $note = $("#note");
     var $codes = $("#codes");
+    var $codes = $("#codes");
 
     function createCode() {
         var str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWSYZ";
@@ -61,18 +62,30 @@
     }
 
     function addCodes() {
+        $codes.html("");
         var sum = $sum.val()
+        var str = "";
         for (let i = 0;i<sum;i++) {
             var code = createCode();
-
-            $.post("/api/admin/code/add", {
-                "code": code.trim(),
-                "times": 1,
-                "note": $note.val().trim()
-            }, function (ret) {
-                if (ret.code === 200) {
-                    let codes = $prefix.val()+" "+ret.data.code+"\r\n";
-                    $("#codes").append(codes);
+            $.ajax({
+                method: 'post',
+                url:'/api/admin/code/add',
+                data:{
+                    code: code.trim(),
+                    times: 1,
+                    note: $note.val().trim()
+                },
+                success:function (ret) {
+                    if (ret.code === 200) {
+                        let codes = $prefix.val()+" "+ret.data.code+"\r\n";
+                        $codes.append(codes);
+                    }
+                },
+                complete:function () {
+                    str += i+"";
+                    if (str.length==sum) {
+                        Tip_Success.show("批量添加查询码成功");
+                    }
                 }
             });
         }
