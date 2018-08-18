@@ -49,8 +49,6 @@
         </div>
     </div>
 </div>
-<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
-<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
     var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
@@ -98,6 +96,7 @@
             method: 'post',
             url: '/api/summoner',
             data: {name: name, code: code, areaId: area},
+            timeout:3000,
             success: function (ret) {
                 $search.removeClass("disabled");
                 Mes_Loading.addClass("hide");
@@ -111,7 +110,7 @@
             },
             error: function () {
                 Mes_Loading.addClass("hide");
-                Tip_Danger.show("多次出现该提示，请联系站长");
+                Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
             }
         });
         queryTimes();

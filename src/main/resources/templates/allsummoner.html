@@ -48,14 +48,8 @@
         </div>
     </div>
 </div>
-<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
-<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
-    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
-    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
-    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
-
     var Mes_Success = $("#success");
     var Mes_Loading = $("#lodding");
     var QQ_Data = $("#qq_data");
@@ -76,6 +70,7 @@
             method: 'post',
             url:'/api/allsummoner',
             data:{name:name, code:code, areaId:area},
+            timeout:3000,
             success:function (ret) {
                 Mes_Loading.addClass("hide");
                 if (ret.code === 200) {

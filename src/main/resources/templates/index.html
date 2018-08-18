@@ -55,15 +55,8 @@
         </div>
     </div>
 </div>
-<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
-<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
-    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
-    var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
-    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
-
-
     var Mes_Success = $("#success");
     var Mes_Loading = $("#lodding");
     var tips = $("#tips");
@@ -90,11 +83,11 @@
             Mes_Loading.addClass("hide");
             return;
         }
-        $btSearch.val("查询中。。。");
         $.ajax({
             method: 'post',
             url:'/api/summoner',
             data:{name:name, code:code, areaId:area},
+            timeout:3000,
             success:function (ret) {
                 Mes_Loading.addClass("hide");
                 tips.addClass("hide");
@@ -113,10 +106,9 @@
             },
             error:function () {
                 Mes_Loading.addClass("hide");
-                Tip_Danger.show("多次出现该提示，请联系站长");
+                Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
             }
         });
-        $btSearch.val("查询");
     }
 </script>
 </body>

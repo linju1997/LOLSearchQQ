@@ -26,11 +26,7 @@
         <input type="submit" class="form-control input-lg" onclick="query()" value="查询">
     </div>
 </div>
-<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
-<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
 <script>
-    var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
-    var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
     function query() {
         var code = $("#code").val();
         $.ajax({

@@ -14,7 +14,15 @@
             display: none !important;
         }
     </style>
+    <script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
     <script id="baidu">
+        var Tip_Success = new $.zui.Messager({icon: 'bell', type: 'success'});
+        var Tip_Info = new $.zui.Messager({icon: 'bell', type: 'info'});
+        var Tip_Danger = new $.zui.Messager({icon: 'bell', type: 'danger'});
+
+
+
         (function () {
             let hm = document.createElement("script");
             hm.src = "https://hm.baidu.com/hm.js?6e4919dde965e4a50a7286a890452054";
