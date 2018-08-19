@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- *  定时刷新Token
+ * 定时刷新Token
+ *
  * @Author: fves
  * @Date: 2018-8-19 15:25
  **/
@@ -19,9 +20,9 @@ public class AutoReflashToken {
     /**
      * 定时三小时 刷新一次token
      */
-    @Scheduled(fixedRate = 1000 * 10)
-    public void reflushToken(){
+    @Scheduled(fixedRate = 1000 * 60 * 60 * 3)
+    public void reflushToken() {
         boolean writeCookie = CookieUtil.writeCookie();
-        log.info(LocalDateTime.now()+" 刷新Token，刷新状态："+writeCookie);
+        log.info(LocalDateTime.now() + " 刷新Token，刷新状态：" + writeCookie);
     }
 }
