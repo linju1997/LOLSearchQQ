@@ -87,6 +87,7 @@ public class LOLAdminController {
         return new APIMessage(202, accessCode, "删除失败");
     }
 
+    @AuthHeader
     @PostMapping("/query")
     public APIMessage query() {
         List<AccessCode> allTimes = accessCodeService.findAccessCodes();

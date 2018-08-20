@@ -79,6 +79,8 @@
                     if (ret.code === 200) {
                         let codes = $prefix.val()+" "+ret.data.code+"\r\n";
                         $codes.append(codes);
+                    }else{
+                        Tip_Danger.show(ret.message);
                     }
                 },
                 complete:function () {

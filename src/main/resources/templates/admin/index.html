@@ -70,9 +70,6 @@
     let $cookie = $("#cookie");
     let $app1 = $("#app1");
 
-
-
-
     function submit() {
         $.post("/api/admin/query", function (ret) {
             if (ret.code === 200) {
@@ -92,7 +89,11 @@
                         "</tr>";
                     $app1.append(str);
                 }
+                console.log(ret);
+                console.log(ret.message);
                 Tip_Success.show(ret.message);
+            }else{
+                Tip_Danger.show("访问拒绝");
             }
         });
     }

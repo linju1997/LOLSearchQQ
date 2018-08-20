@@ -55,7 +55,6 @@ public class DuoWanLOLService {
         String gameID = duoWanLolService.getGameID(summoner);
         if (gameID == null) {
             return null;
-
         }
         summoner.setGameId(gameID);
         String qq = LOLSearchQQ.getQQNumber(summoner);

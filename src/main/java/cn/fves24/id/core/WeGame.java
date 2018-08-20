@@ -79,8 +79,8 @@ public class WeGame {
         if (ret == null) {
             return false;
         }
-        String gameId = JSONObject.parseObject(ret).getJSONArray("game").getJSONObject(0).getString("gameId");
+        String gameId = JSONObject.parseObject(ret).getJSONArray("games").getJSONObject(0).getString("gameId");
         summoner.setGameId(gameId);
-        return false;
+        return true;
     }
 }

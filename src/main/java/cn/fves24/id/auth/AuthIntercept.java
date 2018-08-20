@@ -50,10 +50,12 @@ public class AuthIntercept implements HandlerInterceptor {
         }
 
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if ("auth".equals(cookie.getName())) {
-                if (password.equals(cookie.getValue())) {
-                    return true;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("auth".equals(cookie.getName())) {
+                    if (password.equals(cookie.getValue())) {
+                        return true;
+                    }
                 }
             }
         }

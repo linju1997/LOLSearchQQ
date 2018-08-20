@@ -27,9 +27,8 @@ public class LoginController {
         PrintWriter writer = response.getWriter();
         if (password.equals(auth)) {
             response.addCookie(new Cookie("auth", password));
-            response.setHeader(HttpHeaders.LOCATION, "/admin/menu");
+            response.sendRedirect("/admin/index");
         } else {
-            response.setHeader(HttpHeaders.LOCATION,"/admin");
             writer.write("不要尝试了，没用的");
         }
     }

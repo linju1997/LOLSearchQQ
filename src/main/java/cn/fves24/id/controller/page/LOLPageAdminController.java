@@ -1,5 +1,6 @@
 package cn.fves24.id.controller.page;
 
+import cn.fves24.id.auth.AuthHeader;
 import cn.fves24.id.util.WebConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,35 +22,19 @@ public class LOLPageAdminController {
         return "admin/vali";
     }
 
-    @RequestMapping("/auth")
-    public String auth(@RequestParam String auth){
-        if (WebConfig.AUTH.equals(auth)) {
-            return "admin/index";
-        }
-        return "admin/vali";
-    }
-
-
-
     /**
      * @return 返回菜单页面
      */
+    @AuthHeader
     @GetMapping("/index")
     public String setMenu() {
         return "admin/index";
     }
 
     /**
-     * @return 返回添加Cookie页面
-     */
-    @GetMapping("/cookie")
-    public String setCookie() {
-        return "admin/cookie";
-    }
-
-    /**
      * @return 返回查询码操作页面
      */
+    @AuthHeader
     @GetMapping("/code")
     public String setCode() {
         return "admin/code";
@@ -58,6 +43,7 @@ public class LOLPageAdminController {
     /**
      * @return 批量生成查询码
      */
+    @AuthHeader
     @GetMapping("/codes")
     public String setCodes(){
         return "admin/codes";

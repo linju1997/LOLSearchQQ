@@ -8,6 +8,7 @@ import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.Summoner;
 import cn.fves24.id.db.service.AccessCodeService;
 import cn.fves24.id.core.DuoWanLOLService;
+import cn.fves24.id.util.record.QueryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -75,6 +77,10 @@ public class LOLSummoner {
         }
         summoner.setName(summoner.getName().trim());
         summoner.setAreaName(Area.getName(summoner.getAreaId()));
+        /* 查询记录 */
+        String tt = LocalDateTime.now().toString() + "  Name:" + summoner.getName() + "  Area:" + summoner.getAreaName() + " Code:" + code;
+        /* END */
+
         code = code.trim();
         WeGame weGame = new WeGame(summoner);
         summoner = weGame.searchSummoner();
@@ -86,11 +92,19 @@ public class LOLSummoner {
         if (!havaGameId) {
             havaGameId = weGame.searchGameId2();
             if (!havaGameId) {
+                /* 查询记录 */
+                tt += " 无战绩";
+                QueryRecord.writeToFile(tt);
+                /* END */
                 return new APIMessage(202, null, "无战绩的ID,暂不支持查询");
             }
         }
         String qq = LOLSearchQQ.getQQNumber(summoner);
         if (qq == null) {
+            /* 查询记录 */
+            tt += " 没有查询到";
+            QueryRecord.writeToFile(tt);
+            /* END */
             return new APIMessage(203, null, "暂时查不到，请稍后重试");
         }
         /*
@@ -100,6 +114,10 @@ public class LOLSummoner {
 
         boolean exists = accessCodeService.existsByCode(code);
         if (!exists) {
+            /* 查询记录 */
+            tt += " QQ:"+qq;
+            QueryRecord.writeToFile(tt);
+            /* END */
             if ("".equals(code)) {
                 return new APIMessage(200, maskQ, "恭喜,可以查到QQ,购买查询码即可查询完整QQ");
             } else {
