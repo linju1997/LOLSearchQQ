@@ -1,6 +1,6 @@
 package cn.fves24.id.config;
 
-import cn.fves24.id.intercept.AdminIntercept;
+import cn.fves24.id.auth.AuthIntercept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -10,18 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
-    private final AdminIntercept adminIntercept;
+    private AuthIntercept authIntercept;
 
     @Autowired
-    public WebMvcConfig(AdminIntercept adminIntercept) {
-        this.adminIntercept = adminIntercept;
+    public WebMvcConfig(AuthIntercept authIntercept) {
+        this.authIntercept = authIntercept;
     }
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(adminIntercept)
-                .addPathPatterns("/admin/index")
-                .addPathPatterns("/admin/code")
-                .addPathPatterns("/api/admin/**");
+        registry.addInterceptor(authIntercept).addPathPatterns("/**");
     }
 }

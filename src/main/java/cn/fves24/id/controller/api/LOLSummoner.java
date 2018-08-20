@@ -56,7 +56,7 @@ public class LOLSummoner {
         int lan = qq.length();
         StringBuilder builder = new StringBuilder();
         builder.append(qq.charAt(0));
-        for (int i = 0; i < lan - 2; i++) {
+        for (int i = 0; i < lan - 1; i++) {
             builder.append("*");
         }
         builder.append(qq.charAt(lan - 1));

@@ -1,6 +1,7 @@
 package cn.fves24.id.controller.api;
 
 
+import cn.fves24.id.auth.AuthHeader;
 import cn.fves24.id.db.service.AccessCodeService;
 import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.AccessCode;
@@ -27,6 +28,7 @@ public class LOLAdminController {
         this.accessCodeService = accessCodeService;
     }
 
+    @AuthHeader
     @PostMapping("/code/add")
     public APIMessage saveCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
@@ -41,6 +43,7 @@ public class LOLAdminController {
         return new APIMessage(202, accessCode, "添加新的查询码失败,查询码可能存在!");
     }
 
+    @AuthHeader
     @PostMapping("/code/addtimes")
     public APIMessage addCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
@@ -54,6 +57,7 @@ public class LOLAdminController {
         return new APIMessage(202, accessCode, "增加次数失败!");
     }
 
+    @AuthHeader
     @PostMapping("/code/update")
     public APIMessage updateCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
@@ -69,6 +73,7 @@ public class LOLAdminController {
         return new APIMessage(202, accessCode, "修改失败!");
     }
 
+    @AuthHeader
     @PostMapping("/code/delete")
     public APIMessage deleteCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
