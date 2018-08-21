@@ -3,10 +3,13 @@ package cn.fves24.id.controller.api;
 
 import cn.fves24.id.auth.AuthHeader;
 import cn.fves24.id.db.service.AccessCodeService;
+import cn.fves24.id.db.service.SummonerService;
 import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.AccessCode;
+import cn.fves24.id.entity.model.Summoner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,17 +22,19 @@ import java.util.List;
  * @author fves
  */
 @RestController
-@RequestMapping("/api/admin")
-public class LOLAdminController {
+@RequestMapping("/api")
+public class APIController {
     private AccessCodeService accessCodeService;
+    private SummonerService summonerService;
 
     @Autowired
-    public LOLAdminController(AccessCodeService accessCodeService) {
+    public APIController(AccessCodeService accessCodeService, SummonerService summonerService) {
         this.accessCodeService = accessCodeService;
+        this.summonerService = summonerService;
     }
 
     @AuthHeader
-    @PostMapping("/code/add")
+    @PostMapping("/admin/code/add")
     public APIMessage saveCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
             return new APIMessage(201, null, result.getFieldError().getDefaultMessage());
@@ -44,7 +49,7 @@ public class LOLAdminController {
     }
 
     @AuthHeader
-    @PostMapping("/code/addtimes")
+    @PostMapping("/admin/code/addtimes")
     public APIMessage addCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
             return new APIMessage(201, null, result.getFieldError().getDefaultMessage());
@@ -58,7 +63,7 @@ public class LOLAdminController {
     }
 
     @AuthHeader
-    @PostMapping("/code/update")
+    @PostMapping("/admin/code/update")
     public APIMessage updateCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
             return new APIMessage(201, null, result.getFieldError().getDefaultMessage());
@@ -74,7 +79,7 @@ public class LOLAdminController {
     }
 
     @AuthHeader
-    @PostMapping("/code/delete")
+    @PostMapping("/admin/code/delete")
     public APIMessage deleteCode(@Valid AccessCode accessCode, BindingResult result) {
         if (result.hasErrors()) {
             return new APIMessage(201, null, result.getFieldError().getDefaultMessage());
@@ -88,9 +93,29 @@ public class LOLAdminController {
     }
 
     @AuthHeader
-    @PostMapping("/query")
+    @PostMapping("/admin/query")
     public APIMessage query() {
         List<AccessCode> allTimes = accessCodeService.findAccessCodes();
         return new APIMessage(200, allTimes, "获取成功");
+    }
+
+    @PostMapping("/times")
+    public APIMessage getTimes(String code) {
+        boolean exists = accessCodeService.existsByCode(code);
+        if (!exists) {
+            return new APIMessage(201, null, "查询码不存在");
+        }
+        int times = accessCodeService.remainTimes(code);
+        return new APIMessage(200, times, "获取成功");
+    }
+
+    @PostMapping("/searchbycode")
+    public APIMessage getSummonerByCode(String code) {
+        boolean exists = accessCodeService.existsByCode(code);
+        if (!exists) {
+            return new APIMessage(201, null, "查询码不存在");
+        }
+        List<Summoner> summoners = summonerService.searchSumonerByCode(code);
+        return new APIMessage(200, summoners, null);
     }
 }

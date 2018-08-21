@@ -42,7 +42,6 @@
                 <span class="content" id="qq_data"></span>
                 <button class="clipt btn" style="margin: 0 10px;">点击复制</button>
             </div>
-            <p id="tips" class="hide">购买查询码可以查询完整QQ号码</p>
         </div>
     </div>
     <div style="position:absolute;left:0;right: 0;text-align: center;margin-top: 10px;padding-bottom: 40px;">
@@ -51,17 +50,18 @@
             <a class="btn input-lg" style="width: 45%" href="/history">查询记录</a>
         </div>
         <div style="margin-top: 20px;">
-            <a class="btn input-lg" style="width: 90%" href="http://qm.qq.com/cgi-bin/qm/qr?k=aKCrge9RgZXwjNyvpCQbmZ7ZpJh2q8Lk">有任何问题，点击联系作者</a>
+            <a class="btn input-lg" style="width: 90%"
+               href="http://qm.qq.com/cgi-bin/qm/qr?k=aKCrge9RgZXwjNyvpCQbmZ7ZpJh2q8Lk">有任何问题，点击联系作者</a>
         </div>
     </div>
 </div>
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
-    var Mes_Success = $("#success");
-    var Mes_Loading = $("#lodding");
-    var tips = $("#tips");
-    var $btSearch = $("#btSearch");
 
+    confirm("含有特殊符号如\"ღ\"等，请联系作者进行查询");
+
+    var Mes_Success = $("#success");
+    var $btSearch = $("#btSearch");
     let clipboard = new ClipboardJS('.clipt', {
         text: function () {
             let area = $("#area option:selected").text();
@@ -70,43 +70,45 @@
             return area + "--" + name + "--" + qq;
         }
     });
-    clipboard.on('success', function () {Tip_Success.show("复制成功");});
-    clipboard.on('error', function () {Tip_Danger.show("复制失败");});
+    clipboard.on('success', function () {
+        Tip_Success.show("复制成功");
+    });
+    clipboard.on('error', function () {
+        Tip_Danger.show("复制失败");
+    });
+
     function submit() {
-        Mes_Loading.removeClass("hide");
+        $btSearch.disabled = true;
         Mes_Success.addClass("hide");
         var name = $("#name").val();
         var area = $("#area").val();
         var code = $("#code").val();
         if (name === "") {
             Tip_Info.show("召唤师名称(ID)不能为空");
-            Mes_Loading.addClass("hide");
             return;
         }
         $.ajax({
             method: 'post',
-            url:'/api/summoner',
-            data:{name:name, code:code, areaId:area},
-            timeout:3000,
-            success:function (ret) {
-                Mes_Loading.addClass("hide");
-                tips.addClass("hide");
+            url: '/api/summoner',
+            data: {name: name, code: code, areaId: area},
+            timeout: 3000,
+            success: function (ret) {
                 if (ret.code === 200) {
                     Mes_Success.removeClass("hide");
                     $("#qq_data").text(ret.data);
                     Tip_Success.show(ret.message);
-                }else if(ret.code === 204){
-                    Mes_Success.removeClass("hide");
+                } else if (ret.code === 204) {
                     $("#qq_data").text(ret.data);
                     Tip_Danger.show(ret.message);
-                }else {
+                } else {
                     Tip_Danger.show(ret.message);
-                    tips.removeClass("hide");
                 }
             },
-            error:function () {
-                Mes_Loading.addClass("hide");
+            error: function () {
                 Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
+            },
+            complete:function () {
+                $btSearch.disabled = false;
             }
         });
     }

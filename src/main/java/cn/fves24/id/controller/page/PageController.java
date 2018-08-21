@@ -3,6 +3,7 @@ package cn.fves24.id.controller.page;
 import cn.fves24.id.area.Area;
 import cn.fves24.id.db.service.AccessCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +18,14 @@ import java.util.List;
  * @author Administrator
  */
 @Controller
-public class LOLPageController {
+public class PageController {
     private List<Area> areaList = new ArrayList<>(Arrays.asList(Area.values()));
     private AccessCodeService accessCodeService;
 
     @Autowired
-    public LOLPageController(AccessCodeService accessCodeService) {
+    public PageController(AccessCodeService accessCodeService) {
         this.accessCodeService = accessCodeService;
     }
-
     /**
      * @param model model
      * @return 返回主页
@@ -35,6 +35,7 @@ public class LOLPageController {
         model.addAttribute(areaList);
         return "index";
     }
+
     @GetMapping("/times")
     public String getTimes() {
         return "times";

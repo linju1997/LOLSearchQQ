@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{admin/base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div>
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>查询时间</td>
+                    <td>名称</td>
+                    <td>大区</td>
+                    <td>查询码</td>
+                    <td>信息</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${list}">
+                    <td th:text="${item.getDate()}"></td>
+                    <td th:text="${item.getName()}"></td>
+                    <td th:text="${item.getArea()}"></td>
+                    <td th:text="${item.getCode()}"></td>
+                    <td th:text="${item.getQq()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- ZUI Javascript 依赖 jQuery -->
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+</body>
+</html>

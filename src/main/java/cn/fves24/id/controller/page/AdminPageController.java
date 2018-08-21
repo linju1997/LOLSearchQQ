@@ -1,19 +1,25 @@
 package cn.fves24.id.controller.page;
 
 import cn.fves24.id.auth.AuthHeader;
+import cn.fves24.id.entity.model.Record;
 import cn.fves24.id.util.WebConfig;
+import cn.fves24.id.util.record.QueryRecord;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author Administrator
  */
 @Controller
 @RequestMapping("/admin")
-public class LOLPageAdminController {
+public class AdminPageController {
     /**
      * @return 返回主页
      */
@@ -47,5 +53,13 @@ public class LOLPageAdminController {
     @GetMapping("/codes")
     public String setCodes(){
         return "admin/codes";
+    }
+
+    @AuthHeader
+    @GetMapping("/record")
+    public String record(Model model){
+        List<Record> list = QueryRecord.readToList();
+        model.addAttribute("list",list);
+        return "admin/record";
     }
 }

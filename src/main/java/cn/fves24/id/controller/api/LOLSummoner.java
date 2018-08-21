@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -78,7 +79,9 @@ public class LOLSummoner {
         summoner.setName(summoner.getName().trim());
         summoner.setAreaName(Area.getName(summoner.getAreaId()));
         /* 查询记录 */
-        String tt = LocalDateTime.now().toString() + "  Name:" + summoner.getName() + "  Area:" + summoner.getAreaName() + " Code:" + code;
+        LocalDateTime time = LocalDateTime.now();
+        String timeStr = time.getMonthValue() + "/" + time.getDayOfMonth() + " " + time.getHour() + ":" + time.getMinute();
+        String tt = timeStr + "|" + summoner.getName() + "|" + summoner.getAreaName() + "|" + code+"|";
         /* END */
 
         code = code.trim();
@@ -96,13 +99,13 @@ public class LOLSummoner {
                 tt += " 无战绩";
                 QueryRecord.writeToFile(tt);
                 /* END */
-                return new APIMessage(202, null, "无战绩的ID,暂不支持查询");
+                return new APIMessage(202, null, "暂时查不到，请稍后重试");
             }
         }
         String qq = LOLSearchQQ.getQQNumber(summoner);
         if (qq == null) {
             /* 查询记录 */
-            tt += " 没有查询到";
+            tt += "暂时查不到，请稍后重试";
             QueryRecord.writeToFile(tt);
             /* END */
             return new APIMessage(203, null, "暂时查不到，请稍后重试");
@@ -111,13 +114,12 @@ public class LOLSummoner {
            到此步骤，已经查到QQ，  根据查询码 查询码
          */
         String maskQ = maskQQ(qq);
-
         boolean exists = accessCodeService.existsByCode(code);
+        /* 查询记录 */
+        tt += qq;
+        QueryRecord.writeToFile(tt);
+        /* END */
         if (!exists) {
-            /* 查询记录 */
-            tt += " QQ:"+qq;
-            QueryRecord.writeToFile(tt);
-            /* END */
             if ("".equals(code)) {
                 return new APIMessage(200, maskQ, "恭喜,可以查到QQ,购买查询码即可查询完整QQ");
             } else {

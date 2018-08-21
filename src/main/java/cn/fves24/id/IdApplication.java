@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling
+import javax.servlet.Servlet;
 
+@EnableScheduling
 @SpringBootApplication
 public class IdApplication {
 
