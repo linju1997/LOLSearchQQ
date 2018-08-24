@@ -4,17 +4,17 @@
 <body>
 <div class="container-fluid">
     <div th:replace="~{base::nav}"></div>
-    <div class="heading" style="margin-bottom: 30px">
+    <div class="heading" style="margin-bottom: 25px">
         <h1 class="text-center">英雄联盟小助手</h1>
     </div>
     <div>
-        <div class="input-group" style="margin: 25px 10px;">
+        <div class="input-group" style="margin: 10px;">
             <span class="input-group-btn">
                  <button class="btn btn-default input-lg" type="button">召唤师名称:</button>
             </span>
             <input id="name" type="text" class="form-control input-lg" placeholder="名称">
         </div>
-        <div class="input-group" style="margin: 25px 10px;">
+        <div class="input-group" style="margin: 10px;">
             <span class="input-group-btn">
                  <button class="btn btn-default input-lg" type="button">召唤师大区:</button>
             </span>
@@ -24,19 +24,19 @@
                         th:value="${item.getId()}"></option>
             </select>
         </div>
-        <div class="input-group" style="margin: 25px 10px;">
+        <div class="input-group" style="margin: 10px;">
             <span class="input-group-btn">
                  <button class="btn btn-default input-lg"
-                         type="button">查&nbsp;&nbsp;&nbsp;询&nbsp;&nbsp;&nbsp;码:</button>
+                         type="button">查&nbsp;&nbsp;&nbsp;&nbsp;询&nbsp;&nbsp;&nbsp;&nbsp;码:</button>
             </span>
             <input id="code" type="text" class="form-control input-lg" placeholder="不填写，试查">
         </div>
-        <div class="input-control" style="margin: 25px 10px;">
+        <div class="input-control" style="margin: 10px;">
             <input id="btSearch" type="button" class="form-control input-lg" onclick="submit()" value="查询">
         </div>
     </div>
-    <div style="margin: 10px;min-height: 102px;">
-        <div class="alert alert-success text-center with-icon hide" id="success">
+    <div style="margin: 5px 10px;min-height: 82px;">
+        <div class="alert alert-success text-center with-icon hide" style="margin-bottom: 0 !important;" id="success">
             <div class="text-center" style="display: block;padding: 10px 0;font-weight: bold">
                 <i class="icon-ok-sign"></i>
                 <span class="content" id="qq_data"></span>
@@ -44,22 +44,24 @@
             </div>
         </div>
     </div>
-    <div style="position:absolute;left:0;right: 0;text-align: center;margin-top: 10px;padding-bottom: 40px;">
+
+    <div style="left:0;right: 0;text-align: center;margin-top: 30px;">
         <div>
-            <a class="btn input-lg" href="http://t.cn/Rkxvw2h" style="width: 45%">购买查询码</a>
-            <a class="btn input-lg" style="width: 45%" href="/history">查询记录</a>
+            <a class="btn btn-lg" th:href="@{${sellUrl}}" style="width: 45%">购买查询码</a>
+            <a class="btn btn-lg" style="width: 45%" href="/history">查询记录</a>
         </div>
         <div style="margin-top: 20px;">
-            <a class="btn input-lg" style="width: 90%"
-               href="http://qm.qq.com/cgi-bin/qm/qr?k=aKCrge9RgZXwjNyvpCQbmZ7ZpJh2q8Lk">有任何问题，点击联系作者</a>
+            <a class="btn btn-lg" style="width: 90%;color: red"
+               th:href="@{${groupUrl}}">加入QQ交流群(免费赠送查询码)</a>
+        </div>
+        <div style="margin-top: 20px;">
+            <a class="btn btn-lg" style="width: 90%"
+               th:href="@{${authorUrl}}">有任何问题，点击联系作者</a>
         </div>
     </div>
 </div>
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
-
-    confirm("含有特殊符号如\"ღ\"等，请联系作者进行查询");
-
     var Mes_Success = $("#success");
     var $btSearch = $("#btSearch");
     let clipboard = new ClipboardJS('.clipt', {
@@ -91,7 +93,7 @@
             method: 'post',
             url: '/api/summoner',
             data: {name: name, code: code, areaId: area},
-            timeout: 3000,
+            timeout: 5000,
             success: function (ret) {
                 if (ret.code === 200) {
                     Mes_Success.removeClass("hide");
@@ -107,10 +109,13 @@
             error: function () {
                 Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
             },
-            complete:function () {
+            complete: function () {
                 $btSearch.disabled = false;
             }
         });
+    }
+    window.onload=function (ev) {
+        confirm("ID包含特殊符号如\"ღ\"等，请联系作者进行查询,系统暂时无法查询该类ID");
     }
 </script>
 </body>

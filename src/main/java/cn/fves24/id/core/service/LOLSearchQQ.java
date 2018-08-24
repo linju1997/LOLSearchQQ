@@ -24,7 +24,6 @@ public class LOLSearchQQ {
         if (json == null) {
             return null;
         }
-
         JSONObject ret = JSONObject.parseObject(json);
         JSONArray participants = ret.getJSONArray("participants");
         int size = participants.size();

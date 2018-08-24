@@ -16,9 +16,10 @@
     <div class="input-control" style="margin: 25px 10px;">
         <input type="submit" class="form-control input-lg" onclick="query()" value="查询">
     </div>
-    <table class="table hide" width="95%" >
+    <table class="table table-condensed table-hover hide" width="95%" >
         <thead>
         <tr>
+            <td>序号</td>
             <td>大区</td>
             <td>名称</td>
             <td>QQ</td>
@@ -49,6 +50,7 @@
                     let data = ret.data;
                     for (let i=0;i<data.length;i++){
                         let tr = "<tr>" +
+                            "            <td>" + (i+1) + "</td>" +
                             "            <td>" + data[i].name + "</td>" +
                             "            <td>" + data[i].areaName + "</td>" +
                             "            <td>" + data[i].qq + "</td>" +
