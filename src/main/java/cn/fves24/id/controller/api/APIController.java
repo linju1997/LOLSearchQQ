@@ -7,6 +7,7 @@ import cn.fves24.id.db.service.SummonerService;
 import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.AccessCode;
 import cn.fves24.id.entity.model.Summoner;
+import cn.fves24.id.util.record.QueryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -117,5 +118,12 @@ public class APIController {
         }
         List<Summoner> summoners = summonerService.searchSumonerByCode(code);
         return new APIMessage(200, summoners, null);
+    }
+
+    @AuthHeader
+    @PostMapping("/delrecord")
+    public APIMessage  delRecord(){
+        boolean deleteFile = QueryRecord.deleteFile();
+        return new APIMessage(200, null, "删除文件状态:"+deleteFile);
     }
 }

@@ -12,5 +12,6 @@
         select name,area_name,qq
         from summoner
         where code = #{code}
+        order by id desc
     </select>
 </mapper>

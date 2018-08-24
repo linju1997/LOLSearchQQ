@@ -9,7 +9,7 @@
     </div>
     <div class="input-group" style="margin: 25px 10px;">
             <span class="input-group-btn">
-                 <button class="btn btn-default input-lg" type="button">查询码:</button>
+                 <button class="btn btn-default input-lg" type="button">查&nbsp;&nbsp;&nbsp;询&nbsp;&nbsp;&nbsp;码:</button>
             </span>
         <input id="code" type="text" class="form-control input-lg">
     </div>
@@ -38,7 +38,7 @@
                     $("#times").val(ret.data);
                     Tip_Success.show('查询成功，剩余' + ret.data + '次');
                 } else {
-                    $("#times").val("查询失败");
+                    $("#times").val(ret.message);
                     Tip_Danger.show(ret.message);
                 }
             },

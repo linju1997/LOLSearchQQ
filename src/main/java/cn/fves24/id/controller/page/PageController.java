@@ -21,6 +21,12 @@ import java.util.List;
 public class PageController {
     private List<Area> areaList = new ArrayList<>(Arrays.asList(Area.values()));
     private AccessCodeService accessCodeService;
+    @Value("${author.url}")
+    private String authorUrl;
+    @Value("${sell.url}")
+    private String sellUrl;
+    @Value("${group.url}")
+    private String groupUrl;
 
     @Autowired
     public PageController(AccessCodeService accessCodeService) {
@@ -33,6 +39,9 @@ public class PageController {
     @GetMapping("/")
     public String getIndex(Model model) {
         model.addAttribute(areaList);
+        model.addAttribute("authorUrl",authorUrl);
+        model.addAttribute("sellUrl",sellUrl);
+        model.addAttribute("groupUrl",groupUrl);
         return "index";
     }
 

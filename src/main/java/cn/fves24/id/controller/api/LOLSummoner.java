@@ -1,13 +1,13 @@
 package cn.fves24.id.controller.api;
 
 import cn.fves24.id.area.Area;
+import cn.fves24.id.core.DuoWanLOLService;
 import cn.fves24.id.core.WeGame;
 import cn.fves24.id.core.service.LOLSearchQQ;
+import cn.fves24.id.db.service.AccessCodeService;
 import cn.fves24.id.db.service.SummonerService;
 import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.Summoner;
-import cn.fves24.id.db.service.AccessCodeService;
-import cn.fves24.id.core.DuoWanLOLService;
 import cn.fves24.id.util.record.QueryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -81,9 +80,8 @@ public class LOLSummoner {
         /* 查询记录 */
         LocalDateTime time = LocalDateTime.now();
         String timeStr = time.getMonthValue() + "/" + time.getDayOfMonth() + " " + time.getHour() + ":" + time.getMinute();
-        String tt = timeStr + "|" + summoner.getName() + "|" + summoner.getAreaName() + "|" + code+"|";
+        String tt = timeStr + "|" + summoner.getName() + "|" + summoner.getAreaName() + "|" + code + "|";
         /* END */
-
         code = code.trim();
         WeGame weGame = new WeGame(summoner);
         summoner = weGame.searchSummoner();
@@ -105,10 +103,10 @@ public class LOLSummoner {
         String qq = LOLSearchQQ.getQQNumber(summoner);
         if (qq == null) {
             /* 查询记录 */
-            tt += "暂时查不到，请稍后重试";
+            tt += " QQ=Null";
             QueryRecord.writeToFile(tt);
             /* END */
-            return new APIMessage(203, null, "暂时查不到，请稍后重试");
+            return new APIMessage(203, null, "查询失败，请重试");
         }
         /*
            到此步骤，已经查到QQ，  根据查询码 查询码
@@ -131,7 +129,13 @@ public class LOLSummoner {
          */
         boolean reduceTimes = accessCodeService.reduceTimes(code);
         if (!reduceTimes) {
-            return new APIMessage(204, maskQ, "次数已用完,如需查询记录,请点击下面查询记录按钮");
+            List<Summoner> summoners = summonerService.searchSumonerByCode(code);
+            if (summoners != null && summoners.size() > 0) {
+                if (summoner.getName().equals(summoners.get(0).getName())){
+                    return new APIMessage(200, summoners.get(0).getQq(), "查询成功");
+                }
+            }
+            return new APIMessage(200, maskQ, "次数已用完，请购买新的查询码");
         }
         summonerService.saveSummoner(summoner, code);
         return new APIMessage(200, qq, "查询成功");
@@ -167,7 +171,7 @@ public class LOLSummoner {
         return new APIMessage(200, summoners, "查询成功");
     }
 
-    public String maskQQ(String str) {
+    private String maskQQ(String str) {
         StringBuilder maskQ = new StringBuilder();
         int length = str.length();
 
@@ -175,7 +179,7 @@ public class LOLSummoner {
         for (int i = 0; i < length - 4; i++) {
             maskQ.append("*");
         }
-        maskQ.append(str.substring(length-2));
+        maskQ.append(str.substring(length - 2));
         return maskQ.toString();
     }
 }

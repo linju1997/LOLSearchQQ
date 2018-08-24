@@ -9,6 +9,10 @@
         <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
     </div>
     <div>
+        <a class="btn" href="/admin/record" style="width: 48%">刷新</a>
+        <button class="btn" onclick="deleteRecord()" style="width: 48%">删除</button>
+    </div>
+    <div style="margin-top: 20px;">
         <table width="100%">
             <thead>
                 <tr>
@@ -35,5 +39,12 @@
 <script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script>
+function deleteRecord() {
+    $.post("/api/delrecord",function (ret) {
+        location.href = "/admin/record";
+    });
+}
+</script>
 </body>
 </html>
