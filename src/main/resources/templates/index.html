@@ -31,7 +31,7 @@
             </span>
             <input id="code" type="text" class="form-control input-lg" placeholder="不填写，试查">
         </div>
-        <div class="input-control" style="margin: 10px;">
+        <div class="input-control" style="margin: 20px 10px 10px 10px;">
             <input id="btSearch" type="button" class="form-control input-lg" onclick="submit()" value="查询">
         </div>
     </div>
@@ -115,7 +115,9 @@
         });
     }
     window.onload=function (ev) {
-        confirm("ID包含特殊符号如\"ღ\"等，请联系作者进行查询,系统暂时无法查询该类ID");
+        // confirm("ID包含特殊符号如\"ღ\"等，请联系作者进行查询,系统暂时无法查询该类ID");
+        var notice = [[${notice}]];
+        confirm(notice);
     }
 </script>
 </body>

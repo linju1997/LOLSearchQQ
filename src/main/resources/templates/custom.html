@@ -96,7 +96,7 @@
             method: 'post',
             url: '/api/summoner',
             data: {name: name, code: code, areaId: area},
-            timeout:3000,
+            timeout:5000,
             success: function (ret) {
                 $search.removeClass("disabled");
                 Mes_Loading.addClass("hide");
@@ -109,7 +109,7 @@
                 }
             },
             error: function () {
-                Mes_Loading.addClass("hide");
+                $search.removeClass("disabled");
                 Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
             }
         });

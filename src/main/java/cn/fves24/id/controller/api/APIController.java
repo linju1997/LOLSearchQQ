@@ -7,10 +7,10 @@ import cn.fves24.id.db.service.SummonerService;
 import cn.fves24.id.entity.dto.APIMessage;
 import cn.fves24.id.entity.model.AccessCode;
 import cn.fves24.id.entity.model.Summoner;
+import cn.fves24.id.util.Constant;
 import cn.fves24.id.util.record.QueryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,7 +56,7 @@ public class APIController {
             return new APIMessage(201, null, result.getFieldError().getDefaultMessage());
         }
         accessCode.setCode(accessCode.getCode().trim());
-        boolean add = accessCodeService.addTimes(accessCode.getCode(),accessCode.getTimes());
+        boolean add = accessCodeService.addTimes(accessCode.getCode(), accessCode.getTimes());
         if (add) {
             return new APIMessage(200, accessCode, "增加次数成功!");
         }
@@ -122,8 +122,20 @@ public class APIController {
 
     @AuthHeader
     @PostMapping("/delrecord")
-    public APIMessage  delRecord(){
+    public APIMessage delRecord() {
         boolean deleteFile = QueryRecord.deleteFile();
-        return new APIMessage(200, null, "删除文件状态:"+deleteFile);
+        return new APIMessage(200, null, "删除文件状态:" + deleteFile);
+    }
+
+    @AuthHeader
+    @PostMapping("/notice")
+    public APIMessage setNotice(String notice) {
+        if (notice == null) {
+            Constant.notice = "暂无公告";
+            return new APIMessage(201, null, "请输入公告内容！");
+        } else {
+            Constant.notice = notice;
+            return new APIMessage(200, null, "设置成功");
+        }
     }
 }

@@ -18,12 +18,14 @@ public class LOLSearchQQ {
      * @return 获取到的QQ号码
      */
     public static String getQQNumber(Summoner summoner) {
+        System.out.println(summoner);
         String url = "http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=combatGains&areaId=" + summoner.getAreaId() + "&gameId=";
         String game = url + summoner.getGameId();
         String json = LOLUtil.get(game);
         if (json == null) {
             return null;
         }
+
         JSONObject ret = JSONObject.parseObject(json);
         JSONArray participants = ret.getJSONArray("participants");
         int size = participants.size();

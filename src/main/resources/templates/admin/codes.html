@@ -55,7 +55,7 @@
         var length = str.length;
         var code = "";
         for (var i = 0; i < 8; i++) {
-            var randomNumber = (Math.random() * (length-1)).toFixed(0);
+            var randomNumber = (Math.random() * (length - 1)).toFixed(0);
             code += str[randomNumber];
         }
         return code;
@@ -64,33 +64,31 @@
     function addCodes() {
         $codes.html("");
         var sum = $sum.val()
-        var str = "";
-        for (let i = 0;i<sum;i++) {
+        var suCount = 0;
+        for (let i = 0; i < sum; i++) {
             var code = createCode();
             $.ajax({
                 method: 'post',
-                url:'/api/admin/code/add',
-                data:{
+                url: '/api/admin/code/add',
+                async: false,
+                data: {
                     code: code.trim(),
                     times: 1,
                     note: $note.val().trim()
                 },
-                success:function (ret) {
+                complete: function (res,status) {
+                    let ret = res.responseJSON;
                     if (ret.code === 200) {
-                        let codes = $prefix.val()+" "+ret.data.code+"\r\n";
+                        suCount++;
+                        let codes = $prefix.val() + " " + ret.data.code + "\r\n";
                         $codes.append(codes);
-                    }else{
+                    } else {
                         Tip_Danger.show(ret.message);
-                    }
-                },
-                complete:function () {
-                    str += i+"";
-                    if (str.length==sum) {
-                        Tip_Success.show("批量添加查询码成功");
                     }
                 }
             });
         }
+        Tip_Success.show("成功添加"+suCount+"张查询码");
     }
 </script>
 </body>

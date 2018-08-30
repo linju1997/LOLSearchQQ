@@ -2,6 +2,7 @@ package cn.fves24.id.controller.page;
 
 import cn.fves24.id.area.Area;
 import cn.fves24.id.db.service.AccessCodeService;
+import cn.fves24.id.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,7 @@ public class PageController {
         model.addAttribute("authorUrl",authorUrl);
         model.addAttribute("sellUrl",sellUrl);
         model.addAttribute("groupUrl",groupUrl);
+        model.addAttribute("notice", Constant.notice);
         return "index";
     }
 
