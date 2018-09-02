@@ -14,18 +14,17 @@ import java.util.List;
 public class LOLSearchQQ {
     /**
      * 获取 名称为summoner.name的QQ号码
+     *
      * @param summoner summoner
      * @return 获取到的QQ号码
      */
     public static String getQQNumber(Summoner summoner) {
-        System.out.println(summoner);
         String url = "http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=combatGains&areaId=" + summoner.getAreaId() + "&gameId=";
         String game = url + summoner.getGameId();
         String json = LOLUtil.get(game);
         if (json == null) {
             return null;
         }
-
         JSONObject ret = JSONObject.parseObject(json);
         JSONArray participants = ret.getJSONArray("participants");
         int size = participants.size();
@@ -43,6 +42,7 @@ public class LOLSearchQQ {
 
     /**
      * 获取该场游戏所有人的QQ号码
+     *
      * @param summoner summoner
      * @return 召唤师列表
      */

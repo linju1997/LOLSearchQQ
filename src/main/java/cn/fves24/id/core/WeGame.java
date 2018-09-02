@@ -50,6 +50,7 @@ public class WeGame {
         JSONObject basicInfo = jsonObject.getJSONObject(0).getJSONObject("basic_info");
         summoner.setLolId(basicInfo.getLong("lolid"));
     }
+
     /**
      * 通过QQuin和AreaID获取 GameID
      * @return 是否获取到GameID
@@ -75,7 +76,8 @@ public class WeGame {
      * @return 是否获取到GameID
      */
     public boolean searchGameId2(){
-        String ret = LOLUtil.get("http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=matchList&areaId="+summoner.getAreaId()+"&accountId="+summoner.getLolId());
+        String url = "http://apps.game.qq.com/lol/lolapi/BattleInfo.php?a0=matchList&areaId=" + summoner.getAreaId() + "&accountId=" + summoner.getLolId();
+        String ret = LOLUtil.get(url);
         if (ret == null) {
             return false;
         }

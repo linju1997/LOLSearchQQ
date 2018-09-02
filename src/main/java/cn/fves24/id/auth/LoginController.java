@@ -23,13 +23,11 @@ public class LoginController {
 
     @PostMapping("/login")
     public void login(String auth,HttpServletResponse response) throws IOException {
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
         if (password.equals(auth)) {
             response.addCookie(new Cookie("auth", password));
-            response.sendRedirect("/admin/index");
+            response.sendRedirect("admin/menu");
         } else {
-            writer.write("不要尝试了，没用的");
+            response.sendRedirect("admin/");
         }
     }
 }

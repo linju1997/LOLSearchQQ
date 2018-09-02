@@ -79,8 +79,8 @@
         /*
         将按钮 disable 防止重复点击
          */
-        var $search = $("#search");
-        $search.addClass("disabled");
+        var $search = $("#search")[0];
+        $search.disabled = true;
 
         let name = $("#name").val().trim();
         let area = $("#area").val();
@@ -91,14 +91,13 @@
             Tip_Info.show('召唤师名称(ID)不能为空');
             return;
         }
-
+        $search.innerText = "查询中...";
         $.ajax({
             method: 'post',
             url: '/api/summoner',
             data: {name: name, code: code, areaId: area},
-            timeout:5000,
+            timeout: 5000,
             success: function (ret) {
-                $search.removeClass("disabled");
                 Mes_Loading.addClass("hide");
                 if (ret.code === 200) {
                     Mes_Success.removeClass("hide");
@@ -109,11 +108,14 @@
                 }
             },
             error: function () {
-                $search.removeClass("disabled");
                 Tip_Danger.show("请重试，如果多次出现该提示，请联系站长");
+            },
+            complete: function () {
+                $search.disabled = false;
+                $search.innerText = "查询";
+                queryTimes();
             }
         });
-        queryTimes();
     }
 
     function queryTimes() {

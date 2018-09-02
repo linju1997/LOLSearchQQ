@@ -79,7 +79,7 @@ public class LOLSummoner {
         summoner.setAreaName(Area.getName(summoner.getAreaId()));
         /* 查询记录 */
         LocalDateTime time = LocalDateTime.now();
-        String timeStr = time.getMonthValue() + "/" + time.getDayOfMonth() + " " + time.getHour() + ":" + time.getMinute();
+        String timeStr = time.getHour() + ":" + time.getMinute()+":"+time.getSecond();
         String tt = timeStr + "|" + summoner.getName() + "|" + summoner.getAreaName() + "|" + code + "|";
         /* END */
         code = code.trim();

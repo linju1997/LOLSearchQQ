@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/menu" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div style="margin-top: 90px;">
+        <div style="margin: 20px 10px;">
+            <a href="/admin/code">
+                <button style="width: 100%" class="btn btn-lg">查询Codes</button>
+            </a>
+        </div>
+        <div style="margin: 20px 10px;">
+            <a href="/admin/addcode">
+                <button style="width: 100%" class="btn btn-lg">添加查询码</button>
+            </a>
+        </div>
+        <div style="margin: 20px 10px;">
+            <a href="/admin/addcodes">
+                <button style="width: 100%" class="btn btn-lg">批量添加查询码</button>
+            </a>
+        </div>
+        <div style="margin: 20px 10px;">
+            <a href="/admin/notice">
+                <button style="width: 100%" class="btn btn-lg">添加公告</button>
+            </a>
+        </div>
+        <div style="margin: 20px 10px;">
+            <a href="/admin/record">
+                <button style="width: 100%" class="btn btn-lg">查询Record</button>
+            </a>
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+</body>
+</html>

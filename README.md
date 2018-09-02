@@ -14,9 +14,20 @@ V1.0.3
  
 V1.0.4
 1. 修改查询timeout 为 5000ms
+2. 添加通过后台修改 公告，而不是固定写死的公告。
+3. 优化同时添加多个查询码时，会出现部分查询码添加失败问题。
+4. 修改后台认证失败时返回到认证页面。
+5. 优化页面交互。
+warning: 
+    message: template might not exist or might not be accessible by any of the configured Template Resolvers 
+    solution:
+        1.确定模板是否在默认templates文件夹里面，并且路径要和返回的View名字一致。
+        2.return "/admin/code"; 这样写是不对的，应该把开头的斜杠去掉，改成：return "admin/code"。
 
 
 ### TODO
 v0.1
 1. 添加通过后台修改 公告，而不是固定写死的公告。(已完成)
-2. 优化同时添加多个查询码时，会出现部分查询码添加失败问题。(不完美)
+2. 优化同时添加多个查询码时，会出现部分查询码添加失败问题。(已完成)
+v0.2
+1. 细化查询Code，如查询已使用的code，未使用的code等。

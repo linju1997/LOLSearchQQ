@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="base::head"></head>
 <body>
 <div class="container-fluid">
-    <div th:replace="~{admin/base::nav}"></div>
+    <div th:replace="~{base::nav}"></div>
     <div class="heading" style="margin-bottom: 30px">
-        <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+        <a href="/admin/menu" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
     </div>
     <div class="input-group" style="margin: 25px 10px;">
             <span class="input-group-btn">
-                 <button class="btn btn-default input-lg" type="button">前&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缀:</button>
+                 <button class="btn btn-default input-lg" type="button">前&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缀:</button>
             </span>
         <input id="prefix" type="text" class="form-control input-lg" value="购买后请及时使用">
     </div>
@@ -22,13 +21,13 @@
     </div>
     <div class="input-group" style="margin: 25px 10px;">
             <span class="input-group-btn">
-                 <button class="btn btn-default input-lg" type="button">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注:</button>
+                 <button class="btn btn-default input-lg" type="button">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注:</button>
             </span>
         <input id="note" type="text" class="form-control input-lg" value="发卡网">
     </div>
     <div class="input-control" style="margin: 25px 10px;">
         <div style="margin: 20px 0;">
-            <input type="button" style="width: 100%;" class="btn btn-lg" onclick="addCodes()" value="生成查询码">
+            <button id="btnSubmit" type="button" style="width: 100%;" class="btn btn-lg" onclick="addCode()">生成查询码</button>
         </div>
     </div>
     <div class="input-control" style="margin: 25px 10px;">
@@ -48,7 +47,7 @@
     var $sum = $("#sum");
     var $note = $("#note");
     var $codes = $("#codes");
-    var $codes = $("#codes");
+    var $btnSubmit = $("#btnSubmit")[0];
 
     function createCode() {
         var str = "1234567890ABCDEFGHIJKLMNOPQRSTUVWSYZ";
@@ -61,34 +60,41 @@
         return code;
     }
 
-    function addCodes() {
-        $codes.html("");
-        var sum = $sum.val()
-        var suCount = 0;
-        for (let i = 0; i < sum; i++) {
-            var code = createCode();
-            $.ajax({
-                method: 'post',
-                url: '/api/admin/code/add',
-                async: false,
-                data: {
-                    code: code.trim(),
-                    times: 1,
-                    note: $note.val().trim()
-                },
-                complete: function (res,status) {
-                    let ret = res.responseJSON;
-                    if (ret.code === 200) {
-                        suCount++;
-                        let codes = $prefix.val() + " " + ret.data.code + "\r\n";
-                        $codes.append(codes);
-                    } else {
-                        Tip_Danger.show(ret.message);
+    function addCode() {
+        $codes.val("");
+        let sum = $sum.val()
+        let succCount = 0;
+        $btnSubmit.innerText = "提交中...";
+        ajaxCode(sum,succCount);
+    }
+
+    function ajaxCode(times,succCount) {
+        let code = createCode();
+        $.ajax({
+            method: 'post',
+            url: '/api/admin/code/add',
+            data: {
+                code: code.trim(),
+                times: 1,
+                note: $note.val().trim()
+            },
+            complete: function (res, status) {
+                let ret = res.responseJSON;
+                if (ret.code === 200) {
+                    let codeStr = $prefix.val() + " " + ret.data.code + "\r\n";
+                    $codes.val($codes.val() + codeStr);
+                    succCount++;
+                    if (times > 1) {
+                        ajaxCode(times - 1,succCount);
+                    }else {
+                        Tip_Success.show("成功添加" + succCount + "条查询码");
+                        $btnSubmit.innerText = "生成查询码";
                     }
+                } else {
+                    Tip_Danger.show(ret.message);
                 }
-            });
-        }
-        Tip_Success.show("成功添加"+suCount+"张查询码");
+            }
+        });
     }
 </script>
 </body>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head"></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{base::nav}"></div>
+    <div class="heading" style="margin-bottom: 30px">
+        <a href="/admin/menu" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+    </div>
+    <div style="margin-top: 90px;">
+       <textarea id="notice" style="width: 100%;min-height: 150px" placeholder="输入公告内容！"></textarea>
+    </div>
+    <div style="margin-top: 30px;">
+        <button id="but" style="width: 100%" class="btn btn-lg" onclick="addNotice()">提交</button>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdn.bootcss.com/zui/1.8.1/js/zui.min.js"></script>
+<script>
+    function addNotice() {
+        let $butElement = $("#but")[0];
+        let notice = $("#notice").val();
+        let b = confirm(notice);
+        if (!b) {
+            Tip_Info.show("取消设置");
+            return;
+        }
+        $butElement.innerText = "提交中...";
+        $.ajax({
+            method: 'post',
+            url: '/api/notice',
+            data: {notice: notice},
+            timeout: 5000,
+            success: function (ret) {
+                if (ret.code === 200) {
+                    Tip_Success.show(ret.message);
+                }else {
+                    Tip_Danger.show(ret.message);
+                }
+            },
+            complete: function () {
+                $butElement.innerText = "提交";
+            }
+        });
+    }
+</script>
+</body>
+</html>

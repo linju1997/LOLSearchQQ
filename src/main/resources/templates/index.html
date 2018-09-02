@@ -32,7 +32,7 @@
             <input id="code" type="text" class="form-control input-lg" placeholder="不填写，试查">
         </div>
         <div class="input-control" style="margin: 20px 10px 10px 10px;">
-            <input id="btSearch" type="button" class="form-control input-lg" onclick="submit()" value="查询">
+            <button id="btSearch" class="btn btn-default input-lg" style="width: 100%;" onclick="submit()">查询</button>
         </div>
     </div>
     <div style="margin: 5px 10px;min-height: 82px;">
@@ -63,7 +63,7 @@
 <script src="//cdn.bootcss.com/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script th:inline="javascript">
     var Mes_Success = $("#success");
-    var $btSearch = $("#btSearch");
+    var $btSearch = $("#btSearch")[0];
     let clipboard = new ClipboardJS('.clipt', {
         text: function () {
             let area = $("#area option:selected").text();
@@ -87,8 +87,10 @@
         var code = $("#code").val();
         if (name === "") {
             Tip_Info.show("召唤师名称(ID)不能为空");
+            $btSearch.disabled = false;
             return;
         }
+        $btSearch.innerText = "查询中...";
         $.ajax({
             method: 'post',
             url: '/api/summoner',
@@ -111,14 +113,15 @@
             },
             complete: function () {
                 $btSearch.disabled = false;
+                $btSearch.innerText = "查询";
             }
         });
     }
-    window.onload=function (ev) {
-        // confirm("ID包含特殊符号如\"ღ\"等，请联系作者进行查询,系统暂时无法查询该类ID");
-        var notice = [[${notice}]];
+
+    window.onload = function () {
+        let notice = [[${notice}]];
         confirm(notice);
-    }
+    };
 </script>
 </body>
 </html>

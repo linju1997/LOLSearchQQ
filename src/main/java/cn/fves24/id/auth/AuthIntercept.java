@@ -1,9 +1,5 @@
 package cn.fves24.id.auth;
 
-import cn.fves24.id.entity.dto.APIMessage;
-import com.alibaba.fastjson.JSONObject;
-import lombok.val;
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -13,7 +9,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * 权限验证 拦截器
@@ -24,8 +19,6 @@ import java.io.PrintWriter;
 public class AuthIntercept implements HandlerInterceptor {
     @Value("${password}")
     private String password;
-
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -59,10 +52,11 @@ public class AuthIntercept implements HandlerInterceptor {
                 }
             }
         }
-        try (PrintWriter writer = response.getWriter()) {
-            APIMessage apiMessage = new APIMessage(HttpStatus.SC_UNAUTHORIZED, "", "权限拒绝");
-            writer.write(JSONObject.toJSONString(apiMessage));
-        } catch (IOException ignore) {}
+        try {
+            response.sendRedirect("/admin/");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         return false;
     }
 }

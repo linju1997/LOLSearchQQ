@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="base::head"></head>
 <body>
 <div class="container-fluid">
-    <div th:replace="~{admin/base::nav}"></div>
+    <div th:replace="~{base::nav}"></div>
     <div class="heading" style="margin-bottom: 30px">
-        <a href="/admin/index" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
+        <a href="/admin/menu" style="text-decoration: none"><h1 class="text-center">英雄联盟小助手后台管理</h1></a>
     </div>
     <div>
-        <a class="btn" href="/admin/record" style="width: 48%">刷新</a>
+        <button class="btn" onclick="reflash()" style="width: 48%">刷新</button>
         <button class="btn" onclick="deleteRecord()" style="width: 48%">删除</button>
     </div>
     <div style="margin-top: 20px;">
@@ -44,6 +43,9 @@ function deleteRecord() {
     $.post("/api/delrecord",function (ret) {
         location.href = "/admin/record";
     });
+}
+function reflash() {
+    window.location = "/admin/record";
 }
 </script>
 </body>
